@@ -3,6 +3,7 @@
 pathfile=$(cd `dirname $0`;pwd)
 temp_file=$pathfile/../conf/iplist
 
+sh $pathfile/../conf/init.sh
 
 dog=`echo $1 | grep '^\.'`
 

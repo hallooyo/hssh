@@ -12,25 +12,13 @@ if [ -n "$dog" ] ; then
 	exit 1;
 fi
 
-#list查询检查
-if [ "$1"x == "list"x ] ; then
-	if [ ! -n "$2" ] ; then
-		cat $temp_file
-		echo "您可以输入第五列中的环境标示，精确查找各环境的服务器信息" 
-		exit 1;
-	else
-		env=`echo $2 | tr 'a-z' 'A-Z'`
-		awk -v v=$env '$5 == v {print $0"\r"}' $temp_file
-		exit 0;
-	fi
-fi
-
+printip() {
 #拿到与输入参数相同的服务器信息
 resule_val=`awk -v v=$1 '$1 == v' $temp_file`
 if [  -n "$resule_val" ];then
 	echo "获取参数成功！"
 else
-	echo "获取参数失败！"
+	echo "您输入的入参无效！"
 	exit 2;
 fi
 
@@ -47,3 +35,27 @@ if [  -n $ip ];then
 else
    echo $ip"输入不正确，列表中没有这个ip！"
 fi
+
+}
+
+case $1 in
+    `echo $1 | grep '^\qa'`)
+        echo "为您查询"$1" 环境列表"
+        env=`echo $1 | tr 'a-z' 'A-Z'`
+	awk -v v=$env '$5 == v {print $5"---------"$2"\r"}' $temp_file
+	echo "查询完毕！"
+	;;
+    [1-9]*)
+        echo "为您查询ip 信息"
+        printip $1
+	echo "查询完毕！"
+        ;;
+    l)
+	cat $temp_file
+	echo "您可以输入第五列中的环境标示，精确查找各环境的服务器信息" 
+	echo "查询完毕！"
+        ;;
+    *)
+	echo "无法识别的参数，请重新输入!"
+	;;
+esac

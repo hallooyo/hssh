@@ -46,6 +46,12 @@ case $1 in
 	awk -v v=$env '$5 == v {print $5"---------"$2"\r"}' $temp_file
 	echo "查询完毕！"
 	;;
+    `echo $1 | grep '^\dev'`)
+        echo "为您查询"$1" 环境列表"
+        env=`echo $1 | tr 'a-z' 'A-Z'`
+        awk -v v=$env '$5 == v {print $5"---------"$2"\r"}' $temp_file
+        echo "查询完毕！"
+        ;;
     [1-9]*)
         echo "为您查询ip 信息"
         printip $1
@@ -56,7 +62,10 @@ case $1 in
 	echo "您可以输入第五列中的环境标示，精确查找各环境的服务器信息" 
 	echo "查询完毕！"
         ;;
-    *)
-	echo "无法识别的参数，请重新输入!"
+    v)
+	vi $temp_file
 	;;
+    *)
+        echo "无法识别的参数，请重新输入!"
+        ;;
 esac

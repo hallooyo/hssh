@@ -52,7 +52,7 @@ case $1 in
         awk -v v=$env '$5 == v {print $5"---------"$2"\r"}' $temp_file
         echo "查询完毕！"
         ;;
-    [1-9]*)
+    [a-z][1-9]*)
         echo "为您查询ip 信息"
         printip $1
 	echo "查询完毕！"

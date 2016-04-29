@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-echo "alias 's=sh $(cd `dirname $0`;pwd)/../bin/hssh.sh'" >> $(cd ; pwd)/.bash_profile
+echo "alias s='sh $(cd `dirname $0`;pwd)/../bin/hssh.sh'" >> $(cd ; pwd)/.bash_profile
 
 sort -u $(cd ; pwd)/.bash_profile > 1
 

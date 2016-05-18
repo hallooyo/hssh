@@ -74,7 +74,7 @@ else
 fi
 }
 
-if [ $# -ne 2 ];then
+if [ $# -eq 1 ];then
 case $1 in
     [a-z][1-9]*)
         echo "正在连接服务器......"
@@ -95,7 +95,7 @@ case $1 in
 esac
 fi
 
-if [ $# -ne 3 ];then
+if [ $# -eq 2 ];then
 case $1 in
     [a-z][1-9]*)
         echo "正在准备下载连接......"
@@ -107,5 +107,4 @@ case $1 in
         ;;
 esac
 fi
-
 

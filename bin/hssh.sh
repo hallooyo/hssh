@@ -13,7 +13,20 @@ if [ -n "$dog" ] ; then
 	exit 1;
 fi
 
-
+problem(){
+        echo "不知道的你要干嘛！你可以尝试一下操作："
+        echo "-------------------------------------------------------------"
+        echo "Syntax format : [command] [desAddr] [remoteFile]"
+        echo "For example(connect to remote server)：
+              s d1 "
+        echo "For example(print desAddr list)：
+              s l "
+        echo "For example(edit desAddr list)：
+              s v "
+        echo "For example(download remote server file)：
+              s d1 /etc/yum.repos.d/CentOS-Base.repo"
+        echo "-------------------------------------------------------------"
+}
 
 connectIP() {
 #拿到与输入参数相同的服务器信息
@@ -90,7 +103,7 @@ case $1 in
         vi $temp_file
         ;;
     *)
-        echo "不知道的你要干嘛！"
+        problem
         ;;
 esac
 fi
@@ -103,7 +116,7 @@ case $1 in
         echo "断开连接！"
         ;;
     *)
-        echo "我不知道的你要干嘛！"
+        problem
         ;;
 esac
 fi

@@ -28,32 +28,41 @@ problem(){
         echo "-------------------------------------------------------------"
 }
 
+
 connectIP() {
 #拿到与输入参数相同的服务器信息
 resule_val=`awk -v v=$1 '$1 == v' $temp_file`
 if [  -n "$resule_val" ];then
 	echo "获取参数成功！"
+  ip=`echo $resule_val | awk -F ' ' '{print $2}' `
+  username=`echo $resule_val | awk -F ' ' '{print $3}'`
+  password=`echo $resule_val | awk -F ' ' '{print $4}'`
+  port=`echo $resule_val | awk -F ' ' '{print $5}'`
 else
-	echo "您输入的入参无效！"
-	exit 2;
+  resule_json=$(curl http://server.ms.jd.com/dtu/getPassWordByIp\?ip\=192.168.172.138)
+  if [ -n "$resule_json" ];then
+      ip=$(echo $resule_json| jq -c '.data' | jq -cr '.sip')
+      username=$(echo $resule_json| jq -c '.data' | jq -cr '.susername')
+      password=$(echo $resule_json | jq -c '.data' | jq -cr '.sPassword')
+      port=$(echo $resule_json | jq -c '.data' | jq -cr '.sport')
+    else
+      echo "您输入的入参无效！"
+      exit 2;
+  fi 
 fi
 
-ip=`echo $resule_val | awk -F ' ' '{print $2}' `
-username=`echo $resule_val | awk -F ' ' '{print $3}'`
-password=`echo $resule_val | awk -F ' ' '{print $4}'`
 
 
 #仅判断ip是否正确即可
 if [  -n $ip ];then
-   echo "显示链接参数：" $ip $username
+   echo "显示链接参数：" $ip $username $password $port
    echo "正在为您启动连接！"
-   $pathfile/../sbin/ssh.sh $ip $username $password
+   $pathfile/../sbin/ssh.sh $ip $username $password $port
 else
    echo $ip"输入不正确，列表中没有这个ip！"
 fi
 
 }
-
 
 download(){
 filepath=`echo $2 | grep '^\/'`
@@ -64,17 +73,26 @@ if [ ! -n "$filepath" ] ; then
 fi
 
 #拿到与输入参数相同的服务器信息
+#拿到与输入参数相同的服务器信息
 resule_val=`awk -v v=$1 '$1 == v' $temp_file`
 if [  -n "$resule_val" ];then
   echo "获取参数成功！"
+  ip=`echo $resule_val | awk -F ' ' '{print $2}' `
+  username=`echo $resule_val | awk -F ' ' '{print $3}'`
+  password=`echo $resule_val | awk -F ' ' '{print $4}'`
+  port=`echo $resule_val | awk -F ' ' '{print $5}'`
 else
-  echo "获取参数失败！"
-  exit 2;
+  resule_json=$(curl http://server.ms.jd.com/dtu/getPassWordByIp\?ip\=192.168.172.138)
+  if [ -n "$resule_json" ];then
+      ip=$(echo $resule_json| jq -c '.data' | jq -cr '.sip')
+      username=$(echo $resule_json| jq -c '.data' | jq -cr '.susername')
+      password=$(echo $resule_json | jq -c '.data' | jq -cr '.sPassword')
+      port=$(echo $resule_json | jq -c '.data' | jq -cr '.sport')
+    else
+      echo "您输入的入参无效！"
+      exit 2;
+  fi 
 fi
-
-ip=`echo $resule_val | awk -F ' ' '{print $2}' `
-username=`echo $resule_val | awk -F ' ' '{print $3}'`
-password=`echo $resule_val | awk -F ' ' '{print $4}'`
 
 
 #仅判断ip是否正确即可

@@ -10,7 +10,7 @@ dog=`echo $1 | grep '^\.'`
 #非法输入检查，不能以点开头
 if [ -n "$dog" ] ; then
     echo "您的输入中有个点作为通配符，不能使用，请输入一个准确的IP！"
-	exit 1;
+  exit 1;
 fi
 
 problem(){
@@ -31,15 +31,20 @@ problem(){
 
 connectIP() {
 #拿到与输入参数相同的服务器信息
+
+ip=${1:1}
+echo $ip
+
 resule_val=`awk -v v=$1 '$1 == v' $temp_file`
 if [  -n "$resule_val" ];then
-	echo "获取参数成功！"
+  echo "获取参数成功！"
   ip=`echo $resule_val | awk -F ' ' '{print $2}' `
   username=`echo $resule_val | awk -F ' ' '{print $3}'`
   password=`echo $resule_val | awk -F ' ' '{print $4}'`
   port=`echo $resule_val | awk -F ' ' '{print $5}'`
 else
-  resule_json=$(curl http://server.ms.jd.com/dtu/getPassWordByIp\?ip\=192.168.172.138)
+  resule_json=$(curl http://server.ms.jd.com/dtu/getPassWordByIp\?ip\=$ip)
+  echo $resule_json
   if [ -n "$resule_json" ];then
       ip=$(echo $resule_json| jq -c '.data' | jq -cr '.sip')
       username=$(echo $resule_json| jq -c '.data' | jq -cr '.susername')
@@ -67,12 +72,14 @@ fi
 download(){
 filepath=`echo $2 | grep '^\/'`
 
+ip=${1:1}
+echo $ip
+
 if [ ! -n "$filepath" ] ; then
     echo "请输入要下载目录或文件的绝对路径时应以/开头！"
     exit 2;
 fi
 
-#拿到与输入参数相同的服务器信息
 #拿到与输入参数相同的服务器信息
 resule_val=`awk -v v=$1 '$1 == v' $temp_file`
 if [  -n "$resule_val" ];then
@@ -82,7 +89,7 @@ if [  -n "$resule_val" ];then
   password=`echo $resule_val | awk -F ' ' '{print $4}'`
   port=`echo $resule_val | awk -F ' ' '{print $5}'`
 else
-  resule_json=$(curl http://server.ms.jd.com/dtu/getPassWordByIp\?ip\=192.168.172.138)
+  resule_json=$(curl http://server.ms.jd.com/dtu/getPassWordByIp\?ip\=$ip)
   if [ -n "$resule_json" ];then
       ip=$(echo $resule_json| jq -c '.data' | jq -cr '.sip')
       username=$(echo $resule_json| jq -c '.data' | jq -cr '.susername')

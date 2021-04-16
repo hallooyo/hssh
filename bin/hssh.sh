@@ -87,7 +87,7 @@ if [  -n "$resule_val" ];then
   password=`echo $resule_val | awk -F ' ' '{print $4}'`
   port=`echo $resule_val | awk -F ' ' '{print $5}'`
 else
-  resule_json=$(curl http://server.ms.jd.com/dtu/getPassWordByIp\?ip\=$ip)
+  resule_json=$(curl http://kit.jd.com/dtu/getPassWordByIp\?ip\=$ip)
   result=$(echo $resule_json | grep "susername")
   if [ -n "$result" ];then
       ip=$(echo $resule_json| jq -c '.data' | jq -cr '.sip')

@@ -12,7 +12,7 @@ iplist=$2
 # 批量执行命令
 for ip in $iplist
 do
-	resule_json=$(curl http://server.ms.jd.com/dtu/getPassWordByIp\?ip\=$ip)
+	resule_json=$(curl http://kit.jd.com/dtu/getPassWordByIp\?ip\=$ip)
 
 	result=$(echo $resule_json | grep "susername")
 

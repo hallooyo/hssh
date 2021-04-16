@@ -20,19 +20,14 @@ configPath=$pathfile/../conf/config.json
 
 # 初始化信息
 ip=$(cat $configPath | jq  -cr '.ip')
-echo $ip
 
 port=$(cat $configPath  | jq  -cr '.port')
-echo $port
 
 username=$(cat $configPath  | jq  -cr '.username')
-echo $username
 
 password=$(cat $configPath  | jq  -cr '.password')
-echo $password
 
 domain=$(cat $configPath  | jq  -cr '.domain')
-echo $domain
 
 # 默认的配置列表
 temp_file=$pathfile/../conf/iplist
@@ -73,7 +68,6 @@ getServerInfo(){
     password=`echo $resule_val | awk -F ' ' '{print $4}'`
     port=`echo $resule_val | awk -F ' ' '{print $5}'`
   else
-    echo $domain$ip
     resule_json=$(curl $domain$ip)
     echo $resule_json
     result=$(echo $resule_json | grep "susername")

@@ -31,10 +31,7 @@ problem(){
 
 connectIP() {
 #拿到与输入参数相同的服务器信息
-
 ip=${1:1}
-echo $ip
-
 resule_val=`awk -v v=$1 '$1 == v' $temp_file`
 if [  -n "$resule_val" ];then
   echo "获取参数成功！"
@@ -43,15 +40,15 @@ if [  -n "$resule_val" ];then
   password=`echo $resule_val | awk -F ' ' '{print $4}'`
   port=`echo $resule_val | awk -F ' ' '{print $5}'`
 else
-  resule_json=$(curl http://server.ms.jd.com/dtu/getPassWordByIp\?ip\=$ip)
-  echo $resule_json
-  if [ -n "$resule_json" ];then
+  resule_json=$(curl http://kit.jd.com/dtu/getPassWordByIp\?ip\=$ip)
+  result=$(echo $resule_json | grep "susername")
+  if [ -n "$result" ];then
       ip=$(echo $resule_json| jq -c '.data' | jq -cr '.sip')
       username=$(echo $resule_json| jq -c '.data' | jq -cr '.susername')
-      password=$(echo $resule_json | jq -c '.data' | jq -cr '.sPassword')
+      password=$(echo $resule_json | jq -c '.data' | jq -cr '.spassword')
       port=$(echo $resule_json | jq -c '.data' | jq -cr '.sport')
     else
-      echo "您输入的入参无效！"
+      echo "当前 ip:${ip} 无法从本地或远程加载"
       exit 2;
   fi 
 fi
@@ -81,6 +78,7 @@ if [ ! -n "$filepath" ] ; then
 fi
 
 #拿到与输入参数相同的服务器信息
+ip=${1:1}
 resule_val=`awk -v v=$1 '$1 == v' $temp_file`
 if [  -n "$resule_val" ];then
   echo "获取参数成功！"
@@ -90,16 +88,18 @@ if [  -n "$resule_val" ];then
   port=`echo $resule_val | awk -F ' ' '{print $5}'`
 else
   resule_json=$(curl http://server.ms.jd.com/dtu/getPassWordByIp\?ip\=$ip)
-  if [ -n "$resule_json" ];then
+  result=$(echo $resule_json | grep "susername")
+  if [ -n "$result" ];then
       ip=$(echo $resule_json| jq -c '.data' | jq -cr '.sip')
       username=$(echo $resule_json| jq -c '.data' | jq -cr '.susername')
       password=$(echo $resule_json | jq -c '.data' | jq -cr '.sPassword')
       port=$(echo $resule_json | jq -c '.data' | jq -cr '.sport')
     else
-      echo "您输入的入参无效！"
+      echo "当前 ip:${ip} 无法从本地或远程加载"
       exit 2;
   fi 
 fi
+
 
 
 #仅判断ip是否正确即可

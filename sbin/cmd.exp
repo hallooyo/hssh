@@ -1,0 +1,28 @@
+#!/usr/bin/expect -x
+
+puts $argv
+
+#if { $argc != 3 } {
+#    puts "Usages: expect $argv0 ip password command"
+#    exit
+#}
+
+# 接收脚本参数
+set ip [lindex $argv 0]
+set password [lindex $argv 1]
+set cmd [lindex $argv 2]
+
+puts $ip
+puts $password
+puts $cmd
+
+
+spawn ssh root@$ip $cmd
+
+# 匹配交互内容
+expect {
+    "yes/no" {send "yes\r";exp_continue}
+    "*password" {send "$password\r"}
+}
+
+expect eof
